@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Udemy翻譯器</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+
+<body>
+  <h1>Udemy翻譯器</h1>
+
+  <div class="button-container">
+    <button type="button" id="change_button">替換</button>
+  </div>
+
+  <div>
+    <label for="input1">API：</label>
+    <input type="text" id="APIKey">
+  </div>
+
+  <div>
+    <label for="targetLabel">目標字幕標籤：</label>
+    <input type="text" id="targetLabel">
+  </div>
+
+  <div class="container">
+    <div class="text-area-wrapper">
+      <label for="original-text">原文：</label>
+      <textarea id="original-text"></textarea>
+    </div>
+    <div class="text-area-wrapper">
+      <label for="translated-text">譯文：</label>
+      <textarea id="translated-text"></textarea>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+
+</html>
