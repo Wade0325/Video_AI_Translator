@@ -1,25 +1,31 @@
-chrome.runtime.onMessage.addListener(async function (message, sender, sendResponse) {
+var contentTabId;
+chrome.runtime.onMessage.addListener(function (message, sender) {
+  if (message.from == "content") {  //get content scripts tab id
+    contentTabId = sender.tab.id;
+  }
   let { APIKey, targetLabel, oriText, transText } = message;
   const oriTextLine = oriText.split('\n');
-  console.log(`原文: ${oriTextLine}`);
-  console.log(`原文: ${oriTextLine.length}`);
-  console.log(`譯文: ${transText}`);
+  // 分割成數組並過濾掉空行
+  const tranedText = transText.split('\n').filter(line => line.trim() !== '');
 
-  oriTextLine.forEach((line, index) => {
-    console.log(`第 ${index + 1} 行: ${line}`);
+  var textMap = new Map();
+  new Promise((resolve) => {
+    for (let i = 0; i < tranedText.length; i += 2) {
+      if (i + 1 < tranedText.length) {
+        textMap.set(tranedText[i], tranedText[i + 1]);
+      }
+    }
+
+    for (let [key, value] of textMap) {
+      console.log(`${key} => ${value}`);
+    }
+
+    resolve();
+  }).then(() => {
+    chrome.tabs.sendMessage(contentTabId, {
+      from: "background",
+      data: Object.fromEntries(textMap)  // 將 Map 轉換為普通對象
+    });
   });
-
-  let tabs = await chrome.tabs.query({ active: true, currentWindow: true });
-  let activeTab = tabs[0];
-  // chrome.scripting.executeScript({
-  //   target: { tabId: activeTab }
-  // })
-
-  const subtitleReplacements = {
-    '原字幕1': '替換字幕1',
-    '原字幕2': '替換字幕2',
-    // 可以繼續添加更多映射
-  };
-
 });
 
